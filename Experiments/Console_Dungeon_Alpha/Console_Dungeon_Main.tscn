@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://7l7r0bahyg0r"]
 
 [ext_resource type="Script" path="res://Experiments/Console_Dungeon_Alpha/Console_Dungeon_Main.gd" id="1_5grqj"]
 

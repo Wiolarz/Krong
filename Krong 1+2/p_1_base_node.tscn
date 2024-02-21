@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://p6rfckllmh6s"]
 
 [ext_resource type="Script" path="res://Krong 1+2/rps_dice.gd" id="1_3mj7l"]
 

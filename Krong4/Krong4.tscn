@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw7dn8eicm4nc"]
+
+[ext_resource type="Script" path="res://Krong4/krong4.gd" id="1_114bq"]
+
+[node name="Krong4" type="Node"]
+script = ExtResource("1_114bq")

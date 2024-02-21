@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://d3aw560ytawig"]
 
 [ext_resource type="Script" path="res://Krong3/krong3.gd" id="1_dlndb"]
 

@@ -73,6 +73,7 @@ func _ready():
 	var list_of_attacks = []
 	for attack in attacks_data:
 		list_of_attacks.append(Attack.new(attack))
+	player.attacks = list_of_attacks[0]
 	
 	var list_of_monsters = [1]
 	

@@ -1,12 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://dolpgsoglq7ce"]
+[gd_scene load_steps=7 format=3 uid="uid://dolpgsoglq7ce"]
 
 [ext_resource type="Script" path="res://Krong5/krong_5_tower_defense.gd" id="1_wlh0u"]
 [ext_resource type="Resource" uid="uid://dt2o3c70bbqp7" path="res://Krong5/Resources/Monsters/presentation_example.tres" id="2_yujf7"]
 [ext_resource type="Resource" uid="uid://cfyhpgwroty32" path="res://Krong5/Resources/Scrolls/Komunista.tres" id="3_23psj"]
 [ext_resource type="Resource" uid="uid://kh313nq6ijee" path="res://Krong5/Resources/Scrolls/Unity.tres" id="4_422ax"]
 [ext_resource type="Resource" uid="uid://4upoubob7f4v" path="res://Krong5/Resources/Scrolls/Wonsz.tres" id="5_mokcx"]
+[ext_resource type="Texture2D" uid="uid://bglkrtctne6r7" path="res://Krong5/tower.png" id="6_5c66n"]
 
 [node name="krong_5_tower_defense" type="Node"]
 script = ExtResource("1_wlh0u")
 wave = ExtResource("2_yujf7")
 scrolls = Array[Resource("res://Krong5/Resource_Scripts/Scroll_resource.gd")]([ExtResource("3_23psj"), ExtResource("4_422ax"), ExtResource("5_mokcx")])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(400, 322)
+scale = Vector2(0.592618, 0.592618)
+texture = ExtResource("6_5c66n")

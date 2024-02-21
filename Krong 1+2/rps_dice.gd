@@ -221,8 +221,8 @@ func ver2_5():
 
 func _ready():
 	print("Start  version 2_5")
-	ver3()
-	#setup_game()
+	setup_game()
+	ver2_5()
 
 func setup_game():
 	player_squad = [[tank_hp, tank_dmg], [tank_hp, tank_dmg]]

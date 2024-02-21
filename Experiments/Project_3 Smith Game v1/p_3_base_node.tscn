@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://k1qc6ecalms4"]
 
 [ext_resource type="Script" path="res://Experiments/Project_3 Smith Game v1/P3_Base_Node.gd" id="1_wxhje"]
 

@@ -6,11 +6,14 @@ extends Object
 enum Symbols
 {
 	EMPTY,
+	# CLASSIC
 	SPEAR,
 	SWORD,
 	SHIELD,
 	BOW,
 	PUSH,
+	# Items # MEGA TEMP
+	RED_AXE
 }
 
 

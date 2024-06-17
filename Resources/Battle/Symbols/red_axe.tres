@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DataSymbol" load_steps=2 format=3 uid="uid://b610532xkntv7"]
+
+[ext_resource type="Script" path="res://Resources/Battle/data_symbol.gd" id="1_nm33p"]
+
+[resource]
+resource_name = "res://Art/old/bow.png"
+script = ExtResource("1_nm33p")
+type = 6
+texture_path = "res://Art/items/red_axe.png"

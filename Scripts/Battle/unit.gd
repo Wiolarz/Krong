@@ -87,3 +87,27 @@ func get_player_color() -> DataPlayerColor:
 	if not controller:
 		return CFG.NEUTRAL_COLOR
 	return controller.get_player_color()
+
+
+
+## 0 no shield, 1 weak shield (any symbol), 2 normal shield, 3 strong shield
+static func defense_power(symbol : E.Symbols) -> int:
+
+	match symbol:
+		E.Symbols.EMPTY:
+			return 0
+		E.Symbols.SHIELD:
+			return 2
+
+		_:
+			return 1
+
+static func attack_power(symbol : E.Symbols) -> int:
+
+	match symbol:
+		E.Symbols.RED_AXE:
+			return 3
+		E.Symbols.SWORD, E.Symbols.SPEAR, E.Symbols.BOW:
+			return 2
+		_:
+			return 0

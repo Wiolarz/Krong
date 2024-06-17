@@ -13,7 +13,8 @@ enum Symbols
 	BOW,
 	PUSH,
 	# Items # MEGA TEMP
-	RED_AXE
+	RED_AXE,
+	STAFF,
 }
 
 

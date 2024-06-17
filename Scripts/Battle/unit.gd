@@ -109,5 +109,7 @@ static func attack_power(symbol : E.Symbols) -> int:
 			return 3
 		E.Symbols.SWORD, E.Symbols.SPEAR, E.Symbols.BOW:
 			return 2
+		E.Symbols.STAFF:
+			return 1
 		_:
 			return 0

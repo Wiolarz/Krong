@@ -96,8 +96,10 @@ static func defense_power(symbol : E.Symbols) -> int:
 	match symbol:
 		E.Symbols.EMPTY:
 			return 0
-		E.Symbols.SHIELD:
+		E.Symbols.SHIELD, E.Symbols.ATTACK_SHIELD, E.Symbols.TOWERSHIELD:
 			return 2
+		E.Symbols.STRONG_SHIELD, E.Symbols.STRONG_TOWERSHIELD:
+			return 3
 
 		_:
 			return 1
@@ -105,11 +107,11 @@ static func defense_power(symbol : E.Symbols) -> int:
 static func attack_power(symbol : E.Symbols) -> int:
 
 	match symbol:
-		E.Symbols.RED_AXE:
+		E.Symbols.STRONG_SWORD, E.Symbols.STRONG_SPEAR:
 			return 3
-		E.Symbols.SWORD, E.Symbols.SPEAR, E.Symbols.BOW:
+		E.Symbols.SWORD, E.Symbols.SPEAR, E.Symbols.BOW, E.Symbols.ATTACK_SHIELD, E.Symbols.FIST, E.Symbols.DAGGER:
 			return 2
-		E.Symbols.STAFF:
+		E.Symbols.STAFF, E.Symbols.MACE:
 			return 1
 		_:
 			return 0

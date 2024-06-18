@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DataSymbol" load_steps=2 format=3 uid="uid://j3ikip34n140"]
+
+[ext_resource type="Script" path="res://Resources/Battle/data_symbol.gd" id="1_yeubp"]
+
+[resource]
+script = ExtResource("1_yeubp")
+type = 9
+texture_path = "res://Art/items/shields/red shield.png"

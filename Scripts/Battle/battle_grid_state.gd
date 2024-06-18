@@ -180,7 +180,7 @@ func _should_die_to_counter_attack(unit : Unit) -> bool:
 
 		var enemy_symbol : E.Symbols = adjacent[side].get_symbol(opposite_side)
 		match enemy_symbol:
-			E.Symbols.SPEAR: # enemy has a counter_attack
+			E.Symbols.SPEAR, E.Symbols.STRONG_SPEAR: # enemy has a counter_attack
 				if Unit.attack_power(enemy_symbol) > shield_power:
 					return true
 	return false
@@ -624,10 +624,11 @@ func _is_kill_move(move : MoveInfo) -> bool:
 		var enemy = target_adjacent_units[side]
 		if enemy and enemy.controller != me:
 			var opposite_side = GenericHexGrid.opposite_direction(side)
-			if enemy.get_symbol(opposite_side) == E.Symbols.SPEAR:
-				if attacker.get_symbol_when_rotated(move_direction, side) != E.Symbols.SHIELD:
-					# will die to spear befor it can kill, no-go
-					return false
+			match enemy.get_symbol(opposite_side):
+				E.Symbols.SPEAR, E.Symbols.STRONG_SPEAR:
+					if attacker.get_symbol_when_rotated(move_direction, side) != E.Symbols.SHIELD:
+						# will die to spear befor it can kill, no-go
+						return false
 	# check for unprotected attacker symbols
 	for side in 6:
 		var enemy = target_adjacent_units[side]
@@ -638,8 +639,7 @@ func _is_kill_move(move : MoveInfo) -> bool:
 
 		var attack_symbol =  attacker.get_symbol_when_rotated(move_direction, side)
 		match attack_symbol:
-				E.Symbols.RED_AXE:
-					print("działa--------------------------------------------------")
+				E.Symbols.STRONG_SWORD:
 					return true
 
 		if enemy.get_symbol(opposite_side) == E.Symbols.SHIELD:

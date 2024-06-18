@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="DataUnit" load_steps=7 format=3 uid="uid://bi52epalmva1y"]
+[gd_resource type="Resource" script_class="DataUnit" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://Resources/Battle/data_unit.gd" id="1_g5mkx"]
 [ext_resource type="Script" path="res://Scripts/World/Economy/goods.gd" id="1_jct27"]
-[ext_resource type="Resource" uid="uid://o4rlmfc33rsh" path="res://Resources/Battle/Symbols/empty.tres" id="2_e1x8y"]
-[ext_resource type="Resource" uid="uid://bp747guikipcb" path="res://Resources/Battle/Symbols/spear.tres" id="3_sfuyx"]
-[ext_resource type="Resource" uid="uid://sr1570kq7sm8" path="res://Resources/Battle/Symbols/shield.tres" id="4_4vnbn"]
+[ext_resource type="Resource" path="res://Resources/Battle/Symbols/empty.tres" id="2_e1x8y"]
+[ext_resource type="Resource" path="res://Resources/Battle/Symbols/spear.tres" id="3_sfuyx"]
+[ext_resource type="Resource" path="res://Resources/Battle/Symbols/red_shield.tres" id="4_e5mpw"]
 
 [sub_resource type="Resource" id="Resource_dh0jd"]
 script = ExtResource("1_jct27")
@@ -16,6 +16,6 @@ ruby = 0
 script = ExtResource("1_g5mkx")
 unit_name = "elf_3"
 texture_path = "res://Art/units/elf/elf_swordsmen.png"
-symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_sfuyx"), ExtResource("4_4vnbn"), ExtResource("2_e1x8y"), ExtResource("2_e1x8y"), ExtResource("2_e1x8y"), ExtResource("4_4vnbn")])
+symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_sfuyx"), ExtResource("4_e5mpw"), ExtResource("2_e1x8y"), ExtResource("2_e1x8y"), ExtResource("2_e1x8y"), ExtResource("4_e5mpw")])
 cost = SubResource("Resource_dh0jd")
 level = 1

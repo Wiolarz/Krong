@@ -162,6 +162,13 @@ const CHESS_CLOCK_BATTLE_TURN_INCREMENT_MS = 2 * 1000
 
 #endregion chess clock
 
+#region Debugging & tests
+
+var debug_check_bmfast_integrity = true
+
+#endregion
+
+
 var player_options : PlayerOptions
 
 func _init():

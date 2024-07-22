@@ -61,6 +61,10 @@ func move_info_summon_unit(move_info : MoveInfo) -> Unit:
 func move_info_move_unit(move_info : MoveInfo) -> void:
 	assert(move_info.move_type == MoveInfo.TYPE_MOVE)
 	currently_processed_move_info = move_info
+
+	var bmfast = BattleManagerFast.from(self)
+	bmfast.check_integrity_before_move(self, move_info)
+	
 	var source_tile_coord := move_info.move_source
 	var target_tile_coord := move_info.target_tile_coord
 	var unit = get_unit(source_tile_coord)
@@ -78,7 +82,8 @@ func move_info_move_unit(move_info : MoveInfo) -> void:
 	if battle_is_ongoing():
 		_switch_participant_turn()
 	currently_processed_move_info = null
-
+	
+	bmfast.check_integrity_after_move(self)
 
 ## returns array of revived units
 func undo(move_info : MoveInfo) -> Array[Unit]:
@@ -632,6 +637,7 @@ func _is_kill_move(move : MoveInfo) -> bool:
 
 
 #endregion
+
 
 #region Subclasses
 

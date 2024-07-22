@@ -8,5 +8,6 @@ func _init(controlled_player : Player):
 	me = controlled_player
 
 
-func play_move(_battle_state : BattleGridState):
-	print("ERROR", me, " AI interface has not been implemented")
+func choose_move(_battle_state : BattleGridState) -> MoveInfo:
+	assert(false, "ERROR: AI interface has not been implemented (for player %s)" % [me])
+	return null

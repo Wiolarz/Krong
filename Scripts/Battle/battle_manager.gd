@@ -1,5 +1,5 @@
 # Singleton - BM
-extends GridNode2D
+class_name BattleManager extends GridNode2D
 
 var _battle_is_ongoing : bool = false
 
@@ -66,7 +66,6 @@ func start_battle(new_armies : Array[Army], battle_map : DataBattleMap, \
 	_current_summary = null
 	_selected_unit = null
 
-	# GAMEPLAY GRID and Armies state:
 	_battle_grid_state = BattleGridState.create(battle_map, new_armies)
 
 	# GRAPHICS GRID:
@@ -338,7 +337,6 @@ func _grid_input_summon(coord : Vector2i) -> void:
 
 
 #region Fighting Phase
-
 func _grid_input_fighting(coord : Vector2i) -> void:
 	assert(_battle_grid_state.state == _battle_grid_state.STATE_FIGHTING, \
 			"_grid_input_fighting called in an incorrect state")
@@ -392,6 +390,7 @@ func _perform_move_info(move_info : MoveInfo) -> void:
 	if not _battle_is_ongoing:
 		return
 	print(NET.get_role_name(), " performing move ", move_info)
+
 	_replay_data.record_move(move_info)
 	_replay_data.save()
 	if NET.server:

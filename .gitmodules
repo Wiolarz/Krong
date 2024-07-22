@@ -1,0 +1,3 @@
+[submodule "LibSpear/godot-cpp"]
+	path = LibSpear/godot-cpp
+	url = https://github.com/godotengine/godot-cpp

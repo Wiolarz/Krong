@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import os
+import sys
+
+env = SConscript("godot-cpp/SConstruct")
+
+env.Append(CPPPATH=["src/"])
+sources = Glob("src/*.cpp")
+
+# Create compile_commands.json for clangd
+env.Tool("compilation_db")
+cdb = env.CompilationDatabase()
+env.Alias('cdb', cdb)
+
+path = "bin"
+name = "libspear"
+platform = env["platform"]
+target = env["target"]
+triple = f"{name}.{platform}.{target}"
+suffix = env["suffix"]
+shlibsuffix = env["SHLIBSUFFIX"]
+
+if platform == "macos":
+    library = env.SharedLibrary(f"{path}/{triple}.framework/{triple}", source=sources)
+else:
+    library = env.SharedLibrary(f"{path}/{name}{suffix}{shlibsuffix}", source=sources)
+
+Default(library)
+

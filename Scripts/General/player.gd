@@ -29,7 +29,7 @@ static func create(new_slot : GameSetupInfo.Slot) -> Player:
 	result.slot = new_slot
 
 	if new_slot.is_bot():
-		result.bot_engine = ExampleBot.new(result)
+		result.bot_engine = AIBattleBotMCTS.new(result)
 		result.add_child(result.bot_engine)
 	result.name = "Player_"+result.get_player_name()
 	result.goods = CFG.get_start_goods()

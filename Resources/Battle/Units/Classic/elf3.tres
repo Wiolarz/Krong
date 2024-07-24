@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="DataUnit" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="DataUnit" load_steps=7 format=3 uid="uid://cf2khgif3fecs"]
 
 [ext_resource type="Script" path="res://Resources/Battle/data_unit.gd" id="1_g5mkx"]
 [ext_resource type="Script" path="res://Scripts/World/Economy/goods.gd" id="1_jct27"]
-[ext_resource type="Resource" path="res://Resources/Battle/Symbols/empty.tres" id="2_e1x8y"]
-[ext_resource type="Resource" path="res://Resources/Battle/Symbols/spear.tres" id="3_sfuyx"]
-[ext_resource type="Resource" path="res://Resources/Battle/Symbols/red_shield.tres" id="4_e5mpw"]
+[ext_resource type="Resource" uid="uid://o4rlmfc33rsh" path="res://Resources/Battle/Symbols/empty.tres" id="2_e1x8y"]
+[ext_resource type="Resource" uid="uid://bp747guikipcb" path="res://Resources/Battle/Symbols/spear.tres" id="3_sfuyx"]
+[ext_resource type="Resource" uid="uid://j3ikip34n140" path="res://Resources/Battle/Symbols/red_shield.tres" id="4_e5mpw"]
 
 [sub_resource type="Resource" id="Resource_dh0jd"]
 script = ExtResource("1_jct27")

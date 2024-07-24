@@ -96,10 +96,10 @@ static func defense_power(symbol : E.Symbols) -> int:
 	match symbol:
 		E.Symbols.EMPTY:
 			return 0
-		E.Symbols.SHIELD, E.Symbols.ATTACK_SHIELD, E.Symbols.TOWERSHIELD:
-			return 2
 		E.Symbols.STRONG_SHIELD, E.Symbols.STRONG_TOWERSHIELD:
 			return 3
+		E.Symbols.SHIELD, E.Symbols.ATTACK_SHIELD, E.Symbols.TOWERSHIELD:
+			return 2
 
 		_:
 			return 1

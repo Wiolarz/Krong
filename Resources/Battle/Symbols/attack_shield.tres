@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DataSymbol" load_steps=2 format=3 uid="uid://dlrrbjr0fppcu"]
+
+[ext_resource type="Script" path="res://Resources/Battle/data_symbol.gd" id="1_jqp4n"]
+
+[resource]
+script = ExtResource("1_jqp4n")
+type = 10
+texture_path = "res://Art/items/shields/two handed blue attack shield.png"

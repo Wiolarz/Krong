@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="DataHero" load_steps=6 format=3 uid="uid://bi7fwl6i8o6a3"]
 
 [ext_resource type="Script" path="res://Resources/Battle/data_hero.gd" id="1_gde2x"]
-[ext_resource type="Resource" uid="uid://b74a77jns7xcd" path="res://Resources/Battle/Units/Elves/elf_unit_hero_druid.tres" id="1_gvmd2"]
+[ext_resource type="Resource" uid="uid://dijlu74nk5d07" path="res://Resources/Battle/Units/Elves/elf_unit_hero_druid.tres" id="1_gvmd2"]
 [ext_resource type="Script" path="res://Scripts/World/Economy/goods.gd" id="1_qvj5x"]
 
 [sub_resource type="Resource" id="Resource_pcl0g"]

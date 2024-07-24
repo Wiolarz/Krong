@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="DataUnit" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="DataUnit" load_steps=6 format=3 uid="uid://dijlu74nk5d07"]
 
 [ext_resource type="Script" path="res://Resources/Battle/data_unit.gd" id="1_755x7"]
 [ext_resource type="Script" path="res://Scripts/World/Economy/goods.gd" id="1_m78i2"]
-[ext_resource type="Resource" path="res://Resources/Battle/Symbols/staff.tres" id="3_ana33"]
-[ext_resource type="Resource" path="res://Resources/Battle/Symbols/empty.tres" id="3_tkndh"]
+[ext_resource type="Resource" uid="uid://cs21roiaxjk47" path="res://Resources/Battle/Symbols/staff.tres" id="3_ana33"]
+[ext_resource type="Resource" uid="uid://o4rlmfc33rsh" path="res://Resources/Battle/Symbols/empty.tres" id="3_tkndh"]
 
 [sub_resource type="Resource" id="Resource_o8yk3"]
 script = ExtResource("1_m78i2")

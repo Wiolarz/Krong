@@ -12,6 +12,8 @@ extends CanvasLayer
 @onready var clock = $TurnsBG/ClockLeft
 @onready var turns = $TurnsBG/TurnCount
 
+@onready var cyclone = $CycloneTimer/CycloneTarget
+
 var armies_reference : Array[BattleGridState.ArmyInBattleState]
 
 var selected_unit : DataUnit = null
@@ -26,6 +28,22 @@ func _ready():
 func _process(_delta):
 	if BM.battle_is_active():
 		update_clock()
+		update_cyclone()
+
+
+func update_cyclone():
+	var timer : int = BM.get_cyclone_timer()
+	var target : Player = BM.get_cyclone_target()
+
+	#TEMP
+	var target_color = BM.get_player_color(target)
+	cyclone.modulate = target_color.color
+
+	
+	if timer == 0:
+		cyclone.text = "%s Sacrifice" % [target_color.name]
+	else:
+		cyclone.text = "%s %d turns" % [target_color.name, timer]
 
 
 func update_clock() -> void:
@@ -38,7 +56,7 @@ func update_clock() -> void:
 	clock.text = "%2.0f : %02.0f : %03.0f" % [minutes, floor(seconds), ms]
 	clock.modulate = BM.get_current_slot_color().color
 
-	turns.text = "Turn %d (last turn %d)" % [BM.get_current_turn(), BM.get_max_turn()]
+	turns.text = "Turn %d" % [BM.get_current_turn()]
 
 
 func get_text_for(controller : Player, selected : bool):

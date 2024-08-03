@@ -19,3 +19,4 @@ texture_path = "res://Art/units/neutral/iron_golem.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_82drr"), ExtResource("4_gycx0"), ExtResource("5_4acvx"), ExtResource("5_4acvx"), ExtResource("5_4acvx"), ExtResource("4_gycx0")])
 cost = SubResource("Resource_6r5q3")
 level = 2
+mana = 0

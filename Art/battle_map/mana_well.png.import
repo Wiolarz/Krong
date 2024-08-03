@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biuvugk468hlt"
-path="res://.godot/imported/grass.png-41ce4a20f7671de9ecd83cdc7a8bd3f6.ctex"
+uid="uid://xoe78lmyi4dg"
+path="res://.godot/imported/mana_well.png-3e3875e7b36e651719520540d7f0b654.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/battle_map/grass.png"
-dest_files=["res://.godot/imported/grass.png-41ce4a20f7671de9ecd83cdc7a8bd3f6.ctex"]
+source_file="res://Art/battle_map/mana_well.png"
+dest_files=["res://.godot/imported/mana_well.png-3e3875e7b36e651719520540d7f0b654.ctex"]
 
 [params]
 

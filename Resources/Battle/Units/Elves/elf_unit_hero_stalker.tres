@@ -18,3 +18,4 @@ texture_path = "res://Art/world_heroes/elf_stalker.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_4ii27"), ExtResource("5_e8umv"), ExtResource("5_e8umv"), ExtResource("5_e8umv"), ExtResource("5_e8umv"), ExtResource("5_e8umv")])
 cost = SubResource("Resource_o8yk3")
 level = 1
+mana = 0

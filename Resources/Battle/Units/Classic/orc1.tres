@@ -18,3 +18,4 @@ texture_path = "res://Art/units/orc/orc_brute.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_5uj6u"), ExtResource("3_5uj6u"), ExtResource("2_84fw4"), ExtResource("2_84fw4"), ExtResource("2_84fw4"), ExtResource("3_5uj6u")])
 cost = SubResource("Resource_7jod1")
 level = 1
+mana = 0

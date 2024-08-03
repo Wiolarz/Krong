@@ -19,3 +19,4 @@ texture_path = "res://Art/world_heroes/orc_executioner.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("5_fihog"), ExtResource("3_6wlcv"), ExtResource("4_h6ov0"), ExtResource("4_h6ov0"), ExtResource("4_h6ov0"), ExtResource("3_6wlcv")])
 cost = SubResource("Resource_bgw4c")
 level = 1
+mana = 0

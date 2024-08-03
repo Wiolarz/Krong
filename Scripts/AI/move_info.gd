@@ -3,6 +3,7 @@ extends Resource
 
 const TYPE_MOVE = "move"
 const TYPE_SUMMON = "summon"
+const TYPE_SACRIFICE = "sacrifice"
 
 @export var move_type: String = ""
 @export var summon_unit: DataUnit
@@ -37,6 +38,12 @@ static func make_summon(unit : DataUnit, dst : Vector2i) -> MoveInfo:
 	result.target_tile_coord = dst
 	return result
 
+static func make_sacrifice(src : Vector2i) -> MoveInfo:
+	var result : MoveInfo = MoveInfo.new()
+	result.move_type = TYPE_SACRIFICE
+	result.move_source = src
+	return result
+
 
 func to_network_serializable() -> Dictionary:
 	return {
@@ -56,6 +63,8 @@ static func from_network_serializable(dict : Dictionary) -> MoveInfo:
 		MoveInfo.TYPE_MOVE:
 			return MoveInfo.make_move(dict["move_source"],
 					dict["target_tile_coord"])
+		MoveInfo.TYPE_SACRIFICE:
+			return MoveInfo.make_sacrifice(dict["move_source"])
 	push_error("move_type not supported: ", dict["move_type"])
 	return null
 

@@ -4,6 +4,7 @@ extends GenericHexGrid
 const STATE_SUMMONNING = "summonning"
 const STATE_FIGHTING = "fighting"
 const STATE_SACRIFICE = "sacrifice"
+const STATE_MAGIC = "magic"
 const STATE_BATTLE_FINISHED = "battle_finished"
 
 const MOVE_IS_INVALID = -1
@@ -55,6 +56,8 @@ static func create(map: DataBattleMap, new_armies : Array[Army]) -> BattleGridSt
 
 
 #region move_info support
+## Set of smaller function that help with unpacking MoveInfo class
+## Call specific methods
 
 func move_info_summon_unit(move_info : MoveInfo) -> Unit:
 	assert(move_info.move_type == MoveInfo.TYPE_SUMMON)
@@ -94,6 +97,33 @@ func move_info_move_unit(move_info : MoveInfo) -> void:
 		_switch_participant_turn()
 	
 
+	currently_processed_move_info = null
+
+
+func move_info_cast_magic(move_info : MoveInfo) -> void:
+	assert(move_info.move_type == MoveInfo.TYPE_MAGIC)
+	currently_processed_move_info = move_info
+	var source_tile_coord := move_info.move_source
+	var target_tile_coord := move_info.target_tile_coord
+	var unit = get_unit(source_tile_coord)
+	#var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
+	var direction = 0 #TEMP
+
+	var spell = move_info.spell
+
+	move_info.register_move_start(current_army_index, unit) # undo related
+
+	_perform_magic(unit, direction, target_tile_coord, spell) # KEY FUNCTION
+
+	move_info.register_whole_move_complete() # TEMP check what it was supposed to do
+
+	turn_counter += 1
+
+	if battle_is_ongoing():
+		_check_battle_end()  # Can change battle_is_ongoing result
+	if battle_is_ongoing():
+		_switch_participant_turn()
+	
 	currently_processed_move_info = null
 
 
@@ -179,6 +209,21 @@ func _perform_move(unit : Unit, direction : int, target_tile_coord : Vector2i) -
 	currently_processed_move_info.register_locomote_complete()
 	if _process_symbols(unit):
 		return
+
+
+func _perform_magic(unit : Unit, direction : int, target_tile_coord : Vector2i, spell : BattleSpell) -> void:
+	# TURN
+	unit.turn(direction)
+	if _process_symbols(unit): #TEMP think about design if there should a turn at all
+		return
+	currently_processed_move_info.register_turning_complete()
+
+	# SPELLCAST
+	"""_change_unit_coord(unit, target_tile_coord)
+	unit.move(target_tile_coord, _get_battle_hex(target_tile_coord).swamp)
+	currently_processed_move_info.register_locomote_complete()
+	if _process_symbols(unit):
+		return"""
 
 #endregion move_info support
 
@@ -498,7 +543,6 @@ func _put_unit_on_grid(unit : Unit, coord : Vector2i) -> void:
 	assert(not hex.unit, "summoning unit to an occupied tile")
 	hex.unit = unit
 
-
 #endregion Summon Phase
 
 
@@ -551,6 +595,14 @@ func cyclone_get_current_target_turns_left() -> int:
 
 
 #endregion Mana Cyclone Timer
+
+
+#region Magic
+
+func is_spell_target_valid(unit : Unit, coord : Vector2i) -> bool:
+	return true #TEMP
+
+#endregion
 
 
 #region End Battle
@@ -901,4 +953,4 @@ class ArmyInBattleState:
 		battle_grid_state.get_ref()._remove_unit(target)
 		target.unit_killed()
 
-#endregion
+#endregion Subclasses

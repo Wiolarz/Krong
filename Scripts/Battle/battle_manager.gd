@@ -17,6 +17,7 @@ var latest_ai_cancel_token : CancellationToken
 var _current_summary : DataBattleSummary = null
 
 var _selected_unit : Unit
+var _selected_spell : BattleSpell
 
 var _replay_data : BattleReplay
 var _replay_is_playing : bool = false
@@ -190,7 +191,6 @@ func get_current_time_left_ms() -> int:
 
 #region Ongoing battle
 
-
 func _on_turn_started(player : Player) -> void:
 	if not _battle_is_ongoing:
 		return
@@ -246,7 +246,7 @@ func redo() -> void:
 	pass
 
 
-## called when tile is clicked
+## IMPORTANT FUNCTION -> called when tile is clicked
 func grid_input(coord : Vector2i) -> void:
 	if not _battle_is_ongoing:
 		print("battle finished, input ignored")
@@ -274,10 +274,9 @@ func grid_input(coord : Vector2i) -> void:
 			move_info = _grid_input_fighting(coord)
 		BattleGridState.STATE_SACRIFICE:
 			move_info = _grid_input_sacrifice(coord)
+		BattleGridState.STATE_MAGIC:
+			move_info = _grid_input_magic(coord)
 
-		
-
-	
 	if move_info:
 		if NET.client:
 			NET.client.queue_request_move(move_info)
@@ -393,7 +392,26 @@ func _grid_input_sacrifice(coord : Vector2i) -> MoveInfo:
 		return MoveInfo.make_sacrifice(coord)
 	return null
 		
-		
+
+
+## Selected Unit -> instead of moving casts a spell
+func _grid_input_magic(coord : Vector2i) -> MoveInfo:
+	assert(_battle_grid_state.state == _battle_grid_state.STATE_MAGIC, \
+			"_grid_input_magic called in an incorrect state")
+	assert(_selected_spell != null, \
+			 "No spell was selected despite being in magic phase")
+	
+
+	if not _battle_grid_state.is_spell_target_valid(_selected_unit, coord):
+		return null
+
+	_unit_to_unit_form[_selected_unit].set_selected(false) # remove selected UI
+	var move_info = MoveInfo.make_magic(_selected_unit.coord, coord, _selected_spell)
+	_selected_unit = null
+	_selected_spell = null
+
+	return move_info
+	
 
 ## Either Unit selection or a command to move
 func _grid_input_fighting(coord : Vector2i) -> MoveInfo:
@@ -424,7 +442,7 @@ func _grid_input_fighting(coord : Vector2i) -> MoveInfo:
 	
 
 
-## Select friendly Unit on a given coord
+## Select friendly Unit on a given coord |
 ## returns true if unit was selected
 func _try_select_unit(coord : Vector2i) -> bool:
 	var new_unit : Unit = _battle_grid_state.get_unit(coord)
@@ -442,6 +460,7 @@ func _try_select_unit(coord : Vector2i) -> bool:
 	return true
 
 
+## Executes given move_info |
 ## used by input moves, replays, network and AI
 func _perform_move_info(move_info : MoveInfo) -> void:
 	if not _battle_is_ongoing:
@@ -465,7 +484,9 @@ func _perform_move_info(move_info : MoveInfo) -> void:
 		
 		MoveInfo.TYPE_SACRIFICE:
 			_battle_grid_state.move_info_sacrifice(move_info)
-			
+		
+		MoveInfo.TYPE_MAGIC:
+			_battle_grid_state.move_info_cast_magic(move_info)
 		_ :
 			assert(false, "Move move_type not supported in perform, " + str(move_info.move_type))
 

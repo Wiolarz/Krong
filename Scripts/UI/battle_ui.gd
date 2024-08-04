@@ -14,6 +14,8 @@ extends CanvasLayer
 
 @onready var cyclone = $CycloneTimer/CycloneTarget
 
+@onready var book = $SpellBook
+
 var armies_reference : Array[BattleGridState.ArmyInBattleState]
 
 var selected_unit : DataUnit = null
@@ -68,12 +70,13 @@ func get_text_for(controller : Player, selected : bool):
 
 
 func load_armies(army_list : Array[BattleGridState.ArmyInBattleState]):
+	# Disable "Switch camera" button for non world map gameplay
 	camera_button.disabled = IM.game_setup_info.game_mode != GameSetupInfo.GameMode.WORLD
 
 	# save armies
 	armies_reference = army_list
 
-	# removing temp shit
+	# removing placeholder elements
 	while players_box.get_child_count() > 1:
 		var c = players_box.get_child(1)
 		c.queue_free()
@@ -94,6 +97,14 @@ func load_armies(army_list : Array[BattleGridState.ArmyInBattleState]):
 		n.pressed.connect(func select(): on_player_selected(idx, true))
 		players_box.add_child(n)
 		idx += 1
+
+
+func load_spells(spells : Array[BattleSpell]) -> void:
+	book.text = spells[0].name
+
+
+func reset_spells() -> void:
+	book.text = "Book"
 
 
 func start_player_turn(army_index : int):

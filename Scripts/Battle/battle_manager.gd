@@ -65,7 +65,7 @@ func start_battle(new_armies : Array[Army], battle_map : DataBattleMap, \
 	_battle_is_ongoing = true
 
 	_current_summary = null
-	_selected_unit = null
+	deselect_unit()
 
 	# GAMEPLAY GRID and Armies state:
 	_battle_grid_state = BattleGridState.create(battle_map, new_armies)
@@ -405,11 +405,9 @@ func _grid_input_magic(coord : Vector2i) -> MoveInfo:
 	if not _battle_grid_state.is_spell_target_valid(_selected_unit, coord):
 		return null
 
-	_unit_to_unit_form[_selected_unit].set_selected(false) # remove selected UI
 	var move_info = MoveInfo.make_magic(_selected_unit.coord, coord, _selected_spell)
-	_selected_unit = null
-	_selected_spell = null
-
+	deselect_unit()
+	
 	return move_info
 	
 
@@ -434,9 +432,8 @@ func _grid_input_fighting(coord : Vector2i) -> MoveInfo:
 	if not _battle_grid_state.is_move_valid(_selected_unit, coord):
 		return null
 
-	_unit_to_unit_form[_selected_unit].set_selected(false)
 	var move_info = MoveInfo.make_move(_selected_unit.coord, coord)
-	_selected_unit = null
+	deselect_unit()
 
 	return move_info
 	
@@ -453,11 +450,30 @@ func _try_select_unit(coord : Vector2i) -> bool:
 
 	# deselect visually old unit if new one selected
 	if _selected_unit:
-		_unit_to_unit_form[_selected_unit].set_selected(false)
+		deselect_unit()
 
 	_selected_unit = new_unit
 	_unit_to_unit_form[_selected_unit].set_selected(true)
+
+	# attempt to display spells available to selected unit
+	_show_spells(_selected_unit)
+
 	return true
+
+func deselect_unit() -> void:
+	if _selected_unit:
+		_unit_to_unit_form[_selected_unit].set_selected(false)
+	_selected_unit = null
+	_selected_spell = null
+	_battle_ui.reset_spells()
+
+
+
+func _show_spells(unit : Unit) -> void:
+	if unit.spells.size() == 0:
+		return
+	
+	_battle_ui.load_spells(unit.spells)
 
 
 ## Executes given move_info |
@@ -475,18 +491,12 @@ func _perform_move_info(move_info : MoveInfo) -> void:
 		NET.server.broadcast_move(move_info)
 
 	match move_info.move_type:
-		MoveInfo.TYPE_MOVE:
-			_battle_grid_state.move_info_move_unit(move_info)
+		MoveInfo.TYPE_MOVE, MoveInfo.TYPE_SACRIFICE, MoveInfo.TYPE_MAGIC:
+			_battle_grid_state.move_info_execute(move_info)
 
 		MoveInfo.TYPE_SUMMON:
-			var unit := _battle_grid_state.move_info_summon_unit(move_info)
+			var unit : Unit = _battle_grid_state.move_info_summon_unit(move_info)
 			_on_unit_summoned(unit)
-		
-		MoveInfo.TYPE_SACRIFICE:
-			_battle_grid_state.move_info_sacrifice(move_info)
-		
-		MoveInfo.TYPE_MAGIC:
-			_battle_grid_state.move_info_cast_magic(move_info)
 		_ :
 			assert(false, "Move move_type not supported in perform, " + str(move_info.move_type))
 

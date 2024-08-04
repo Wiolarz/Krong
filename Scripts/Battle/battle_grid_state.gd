@@ -56,8 +56,7 @@ static func create(map: DataBattleMap, new_armies : Array[Army]) -> BattleGridSt
 
 
 #region move_info support
-## Set of smaller function that help with unpacking MoveInfo class
-## Call specific methods
+
 
 func move_info_summon_unit(move_info : MoveInfo) -> Unit:
 	assert(move_info.move_type == MoveInfo.TYPE_SUMMON)
@@ -76,71 +75,50 @@ func move_info_summon_unit(move_info : MoveInfo) -> Unit:
 	return unit
 
 
-func move_info_move_unit(move_info : MoveInfo) -> void:
-	assert(move_info.move_type == MoveInfo.TYPE_MOVE)
+## Unpacker of MoveInfo class |
+## Calls specific methods based on 'move_info.move_type'
+func move_info_execute(move_info : MoveInfo) -> void:
 	currently_processed_move_info = move_info
+	
 	var source_tile_coord := move_info.move_source
-	var target_tile_coord := move_info.target_tile_coord
+
 	var unit = get_unit(source_tile_coord)
-	var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
-	move_info.register_move_start(current_army_index, unit)
 
-	_perform_move(unit, direction, target_tile_coord)
 
-	move_info.register_whole_move_complete()
+	match move_info.move_type:
+		MoveInfo.TYPE_MOVE:
+			var target_tile_coord := move_info.target_tile_coord
+			var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
 
+			move_info.register_move_start(current_army_index, unit)
+			_perform_move(unit, direction, target_tile_coord)
+			move_info.register_whole_move_complete()
+
+		MoveInfo.TYPE_SACRIFICE:
+			turn_counter -= 1 #TEMP? Doesn't move the turn counter
+			move_info.register_kill(_get_army_index(cyclone_target), unit)
+
+			_kill_unit(unit)
+		
+		MoveInfo.TYPE_MAGIC:
+			var target_tile_coord := move_info.target_tile_coord
+			var spell = move_info.spell
+			#var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
+			var direction = 0 #TEMP
+			move_info.register_move_start(current_army_index, unit) # undo related
+
+			_perform_magic(unit, direction, target_tile_coord, spell) # KEY FUNCTION
+
+			move_info.register_whole_move_complete() # TEMP check what it was supposed to do
+			
 	turn_counter += 1
+	currently_processed_move_info = null
 
 	if battle_is_ongoing():
 		_check_battle_end()  # Can change battle_is_ongoing result
 	if battle_is_ongoing():
 		_switch_participant_turn()
-	
 
-	currently_processed_move_info = null
-
-
-func move_info_cast_magic(move_info : MoveInfo) -> void:
-	assert(move_info.move_type == MoveInfo.TYPE_MAGIC)
-	currently_processed_move_info = move_info
-	var source_tile_coord := move_info.move_source
-	var target_tile_coord := move_info.target_tile_coord
-	var unit = get_unit(source_tile_coord)
-	#var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
-	var direction = 0 #TEMP
-
-	var spell = move_info.spell
-
-	move_info.register_move_start(current_army_index, unit) # undo related
-
-	_perform_magic(unit, direction, target_tile_coord, spell) # KEY FUNCTION
-
-	move_info.register_whole_move_complete() # TEMP check what it was supposed to do
-
-	turn_counter += 1
-
-	if battle_is_ongoing():
-		_check_battle_end()  # Can change battle_is_ongoing result
-	if battle_is_ongoing():
-		_switch_participant_turn()
-	
-	currently_processed_move_info = null
-
-
-func move_info_sacrifice(move_info : MoveInfo) -> void:
-	assert(move_info.move_type == MoveInfo.TYPE_SACRIFICE)
-	currently_processed_move_info = move_info
-	
-	var source_tile_coord := move_info.move_source
-
-	var unit = get_unit(source_tile_coord)
-
-	move_info.register_kill(_get_army_index(cyclone_target), unit)
-
-	_kill_unit(unit)
-
-	if battle_is_ongoing():
-		_switch_participant_turn()
 
 
 ## returns array of revived units

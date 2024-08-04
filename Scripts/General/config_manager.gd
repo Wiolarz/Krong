@@ -147,7 +147,7 @@ const WORLD_MOVABLE_TILES = [
 
 #region Chess clock
 
-const CHESS_CLOCK_BATTLE_TIME_PER_PLAYER_MS = 3 * 60 * 1000
+const CHESS_CLOCK_BATTLE_TIME_PER_PLAYER_MS = 3 * 60 * 1000 * 69
 const CHESS_CLOCK_BATTLE_TURN_INCREMENT_MS = 2 * 1000
 
 #endregion chess clock

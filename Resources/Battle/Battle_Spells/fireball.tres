@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BattleSpell" load_steps=2 format=3 uid="uid://baj8k31p0lgh3"]
+
+[ext_resource type="Script" path="res://Scripts/Battle/battle_spell.gd" id="1_8g38n"]
+
+[resource]
+script = ExtResource("1_8g38n")
+name = "Fireball"
+icon_path = "res://Art/items/red_axe.png"

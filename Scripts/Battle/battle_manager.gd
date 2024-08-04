@@ -267,6 +267,9 @@ func grid_input(coord : Vector2i) -> void:
 
 	var move_info : MoveInfo
 
+	if _battle_ui.selected_spell != null:
+		_battle_grid_state.state = BattleGridState.STATE_MAGIC # TEMP
+
 	match _battle_grid_state.state:
 		BattleGridState.STATE_SUMMONNING:
 			move_info = _grid_input_summon(coord)
@@ -394,18 +397,22 @@ func _grid_input_sacrifice(coord : Vector2i) -> MoveInfo:
 		
 
 
+
+
+
+
 ## Selected Unit -> instead of moving casts a spell
 func _grid_input_magic(coord : Vector2i) -> MoveInfo:
 	assert(_battle_grid_state.state == _battle_grid_state.STATE_MAGIC, \
 			"_grid_input_magic called in an incorrect state")
-	assert(_selected_spell != null, \
-			 "No spell was selected despite being in magic phase")
-	
 
-	if not _battle_grid_state.is_spell_target_valid(_selected_unit, coord):
+	if _battle_ui.selected_spell == null:
+		return null # no spell selected to cast on ui
+
+	if not _battle_grid_state.is_spell_target_valid(_selected_unit, coord, _battle_ui.selected_spell):
 		return null
 
-	var move_info = MoveInfo.make_magic(_selected_unit.coord, coord, _selected_spell)
+	var move_info = MoveInfo.make_magic(_selected_unit.coord, coord, _battle_ui.selected_spell)
 	deselect_unit()
 	
 	return move_info
@@ -473,7 +480,8 @@ func _show_spells(unit : Unit) -> void:
 	if unit.spells.size() == 0:
 		return
 	
-	_battle_ui.load_spells(unit.spells)
+	#TODO? check here if selected unit is preview mode only (controlled by another player)
+	_battle_ui.load_spells(_battle_grid_state.current_army_index , unit.spells)
 
 
 ## Executes given move_info |

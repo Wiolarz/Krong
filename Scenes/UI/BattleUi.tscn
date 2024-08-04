@@ -136,12 +136,15 @@ offset_right = 495.0
 offset_bottom = 114.0
 text = "Player1 5 turns"
 
-[node name="SpellBook" type="Button" parent="."]
-offset_left = 36.0
-offset_top = 661.0
-offset_right = 181.0
-offset_bottom = 734.0
-text = "BOOK"
+[node name="SpellBook" type="VBoxContainer" parent="."]
+offset_left = 22.0
+offset_top = 282.0
+offset_right = 226.0
+offset_bottom = 768.0
+
+[node name="Spell" type="Button" parent="SpellBook"]
+layout_mode = 2
+text = "Spell"
 
 [connection signal="pressed" from="SwitchCamera" to="." method="_on_switch_camera_pressed"]
 [connection signal="pressed" from="Menu" to="." method="_on_menu_pressed"]

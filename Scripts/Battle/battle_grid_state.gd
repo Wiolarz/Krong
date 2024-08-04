@@ -577,7 +577,7 @@ func cyclone_get_current_target_turns_left() -> int:
 
 #region Magic
 
-func is_spell_target_valid(unit : Unit, coord : Vector2i) -> bool:
+func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -> bool:
 	return true #TEMP
 
 #endregion

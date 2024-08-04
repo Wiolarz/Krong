@@ -16,11 +16,16 @@ extends CanvasLayer
 
 @onready var book = $SpellBook
 
+
+
 var armies_reference : Array[BattleGridState.ArmyInBattleState]
 
 var selected_unit : DataUnit = null
 var selected_unit_button : TextureButton = null
 var current_player : int = 0
+
+var selected_spell : BattleSpell = null
+var selected_spell_button : TextureButton = null
 
 
 func _ready():
@@ -99,12 +104,64 @@ func load_armies(army_list : Array[BattleGridState.ArmyInBattleState]):
 		idx += 1
 
 
-func load_spells(spells : Array[BattleSpell]) -> void:
-	book.text = spells[0].name
+func load_spells(army_index : int, spells : Array[BattleSpell], preview : bool = false) -> void:
+	selected_spell = null #TODO check if neccesary
+	selected_spell_button = null
+	
+	if not preview:
+		current_player = army_index
+
+	for i in range(armies_reference.size()):
+		var is_currently_active := (i == current_player)
+		var controller = armies_reference[i].army_reference.controller
+		var button := players_box.get_child(i + 1) as Button
+		button.text = get_text_for(controller, is_currently_active)
+
+	
+
+	#Get background color for spell book
+	var unit_controller : Player = armies_reference[army_index].army_reference.controller
+	var bg_color : DataPlayerColor = CFG.NEUTRAL_COLOR
+	if unit_controller:
+		bg_color = unit_controller.get_player_color()
+	
+	
+	for spell in spells:
+		var b := TextureButton.new()
+		
+		b.texture_normal = CFG.SUMMON_BUTTON_TEXTURE # TEMP replace for proper default spell background
+
+		#TEMP
+		b.texture_normal = load(spell.icon_path)
+		#var spell_icon : Texture2D = load(spell.icon_path) #:= UnitForm.create_for_summon_ui(unit, bg_color)
+		
+		#spell_icon.position = b.texture_normal.get_size() / 2
+		#b.add_child(spell_icon)
+
+		book.add_child(b)
+		var lambda = func on_click():
+			if (current_player != army_index):
+				return
+			if selected_spell_button:
+				selected_spell_button.modulate = Color.WHITE
+			
+			if selected_spell_button == b: # Deselct a spell
+				selected_spell_button.modulate = Color.WHITE
+				selected_spell = null
+				selected_spell_button = null
+			else:
+				selected_spell = spell
+				selected_spell_button = b
+				selected_spell_button.modulate = Color.RED
+		b.pressed.connect(lambda)
+		
+
 
 
 func reset_spells() -> void:
-	book.text = "Book"
+	# clean spells
+	for old_buttons in book.get_children():
+		old_buttons.queue_free()
 
 
 func start_player_turn(army_index : int):

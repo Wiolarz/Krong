@@ -478,7 +478,7 @@ func _kill_unit(target : Unit) -> void:
 	var target_army_index := _find_army_idx(target.controller)
 	
 	currently_processed_move_info.register_kill(target_army_index, target)
-	
+
 	# killing starts
 	_get_player_army(target.controller).kill_unit(target)
 	_remove_unit(target) # remove reference from hextile
@@ -611,13 +611,10 @@ func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpe
 			print(get_unit(target_tile_coord).effects)
 		_:
 			printerr("Spell not supported: ", spell.name)
+			return
 
-	# SPELLCAST
-	"""_change_unit_coord(unit, target_tile_coord)
-	unit.move(target_tile_coord, _get_battle_hex(target_tile_coord).swamp)
-	currently_processed_move_info.register_locomote_complete()
-	if _process_symbols(unit):
-		return"""
+	unit.spells.erase(spell)
+
 
 #endregion
 

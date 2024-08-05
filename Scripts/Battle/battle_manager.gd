@@ -535,6 +535,7 @@ func _on_unit_moved(unit: Unit) -> void:
 #region Battle End
 
 func close_when_quiting_game() -> void:
+	deselect_unit()
 	_clear_anim_queue()
 	_reset_grid_and_unit_forms()
 
@@ -546,7 +547,8 @@ func _on_battle_ended() -> void:
 		assert(false, "battle ended when it was not ongoing...")
 		return
 	_battle_is_ongoing = false
-
+	deselect_unit()
+	
 	await get_tree().create_timer(1).timeout # TEMP, don't exit immediately
 	while _replay_is_playing:
 		await get_tree().create_timer(0.1).timeout
@@ -565,6 +567,7 @@ func _close_battle() -> void:
 	_clear_anim_queue()
 	_turn_off_battle_ui()
 	_reset_grid_and_unit_forms()
+	deselect_unit()
 
 	if not WM.world_game_is_active():
 		print("end of test battle")

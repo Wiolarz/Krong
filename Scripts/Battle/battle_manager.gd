@@ -442,7 +442,7 @@ func _grid_input_fighting(coord : Vector2i) -> MoveInfo:
 	
 
 
-## Select friendly Unit on a given coord |
+## Select friendly Unit on a given coord [br]
 ## returns true if unit was selected
 func _try_select_unit(coord : Vector2i) -> bool:
 	var new_unit : Unit = _battle_grid_state.get_unit(coord)
@@ -480,7 +480,7 @@ func _show_spells(unit : Unit) -> void:
 	_battle_ui.load_spells(_battle_grid_state.current_army_index , unit.spells)
 
 
-## Executes given move_info |
+## Executes given move_info [br]
 ## used by input moves, replays, network and AI
 func _perform_move_info(move_info : MoveInfo) -> void:
 	if not _battle_is_ongoing:

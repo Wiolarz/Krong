@@ -17,6 +17,7 @@ var current_army_index : int = 0
 var armies_in_battle_state : Array[ArmyInBattleState] = []
 
 var currently_processed_move_info : MoveInfo = null
+var currently_active_unit : Unit = null
 
 var number_of_mana_wells : int = 0
 var cyclone_target : ArmyInBattleState
@@ -74,7 +75,7 @@ func move_info_summon_unit(move_info : MoveInfo) -> Unit:
 	return unit
 
 
-## Unpacker of MoveInfo class |
+## Unpacker of MoveInfo class [br]
 ## Calls specific methods based on 'move_info.move_type'
 func move_info_execute(move_info : MoveInfo) -> void:
 	currently_processed_move_info = move_info
@@ -82,6 +83,7 @@ func move_info_execute(move_info : MoveInfo) -> void:
 	var source_tile_coord := move_info.move_source
 
 	var unit = get_unit(source_tile_coord)
+	currently_active_unit = unit #TEMP verify where you have to reset this value
 
 
 	match move_info.move_type:
@@ -208,17 +210,17 @@ func _process_symbols(unit : Unit) -> bool:
 
 func _should_die_to_counter_attack(unit : Unit) -> bool:
 	# Returns true if Enemy counter_attack can kill the target
-	var adjacent = _get_adjacent_units(unit.coord)
+	var adjacent_units = _get_adjacent_units(unit.coord)
 
 	for side in range(6):
-		if not adjacent[side]:
+		if not adjacent_units[side]:
 			continue # no unit
-		if adjacent[side].controller == unit.controller:
+		if adjacent_units[side].controller == unit.controller:
 			continue # no friendly fire
 		if unit.get_symbol(side) == E.Symbols.SHIELD:
 			continue # we have a shield
 		var opposite_side := GenericHexGrid.opposite_direction(side)
-		if adjacent[side].get_symbol(opposite_side) == E.Symbols.SPEAR:
+		if adjacent_units[side].get_symbol(opposite_side) == E.Symbols.SPEAR:
 			return true # enemy has a counter_attack
 	return false
 
@@ -464,7 +466,8 @@ func _change_unit_coord(unit : Unit, target_coord : Vector2i) -> void:
 	_remove_unit(unit)
 	_put_unit_on_grid(unit, target_coord)
 
-
+## Used for movement, kills, unsummon(undo) [br]
+## removes Unit from logic hex tile
 func _remove_unit(unit : Unit) -> void:
 	var hex := _get_battle_hex(unit.coord)
 	assert(hex.unit == unit, "incorrect remove unit, coord desync")
@@ -473,10 +476,33 @@ func _remove_unit(unit : Unit) -> void:
 
 func _kill_unit(target : Unit) -> void:
 	var target_army_index := _find_army_idx(target.controller)
+	
 	currently_processed_move_info.register_kill(target_army_index, target)
-
+	
+	# killing starts
 	_get_player_army(target.controller).kill_unit(target)
+	_remove_unit(target) # remove reference from hextile
+	target.unit_killed() # emit singal for visual death animation
 	_check_battle_end()
+	if not battle_is_ongoing():
+		return
+
+	# does this unit death leads to a magic effect
+	for spell in target.effects:
+		#spell.enchanted_unit_dies()
+		match spell.name:
+			"Vengeance":
+				#get_unit(target_tile_coord).effects.append(spell)
+				#print(get_unit(target_tile_coord).effects)
+				print("zemsta")
+				#TODO check if this temp solution should be used
+				_kill_unit(currently_active_unit)
+
+			_:
+				continue
+
+	
+	
 
 
 ## TODO implement repeated moves detection
@@ -896,7 +922,8 @@ class ArmyInBattleState:
 		start_turn_clock_time_left_ms = get_time_left_ms()
 		start_turn_clock_time_left_ms += turn_increment_ms
 
-
+	## Manages unit relation to it's related army object [br]
+	## Used in so that "summary"
 	func kill_unit(target : Unit) -> void:
 		print("killing ", target.coord, " ",target.template.unit_name)
 		if target.template.mana > 0:
@@ -906,8 +933,6 @@ class ArmyInBattleState:
 		units.erase(target)
 		dead_units.append(target.template)
 		#gdlint: ignore=private-method-call
-		battle_grid_state.get_ref()._remove_unit(target)
-		target.unit_killed()
 
 
 	func revive(kill_info : MoveInfo.KilledUnit) -> Unit:
@@ -922,7 +947,7 @@ class ArmyInBattleState:
 		dead_units.append_array(units_to_summon)
 		units_to_summon.clear()
 		for unit_idx in range(units.size() - 1, -1, -1):
-			kill_unit(units[unit_idx])
+			battle_grid_state.get_ref()._kill_unit(units[unit_idx])
 
 
 	func can_fight() -> bool:

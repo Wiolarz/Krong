@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BattleSpell" load_steps=2 format=3 uid="uid://oq31g85fljuf"]
+
+[ext_resource type="Script" path="res://Scripts/Battle/battle_spell.gd" id="1_oxtud"]
+
+[resource]
+script = ExtResource("1_oxtud")
+name = "Vengeance"
+icon_path = "res://Art/items/blue_knife.png"

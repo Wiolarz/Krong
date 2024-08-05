@@ -4,7 +4,6 @@ extends GenericHexGrid
 const STATE_SUMMONNING = "summonning"
 const STATE_FIGHTING = "fighting"
 const STATE_SACRIFICE = "sacrifice"
-const STATE_MAGIC = "magic"
 const STATE_BATTLE_FINISHED = "battle_finished"
 
 const MOVE_IS_INVALID = -1
@@ -103,11 +102,10 @@ func move_info_execute(move_info : MoveInfo) -> void:
 		MoveInfo.TYPE_MAGIC:
 			var target_tile_coord := move_info.target_tile_coord
 			var spell = move_info.spell
-			#var direction = GenericHexGrid.direction_to_adjacent(unit.coord, target_tile_coord)
-			var direction = 0 #TEMP
+			
 			move_info.register_move_start(current_army_index, unit) # undo related
 
-			_perform_magic(unit, direction, target_tile_coord, spell) # KEY FUNCTION
+			_perform_magic(unit, target_tile_coord, spell) # KEY FUNCTION
 
 			move_info.register_whole_move_complete() # TEMP check what it was supposed to do
 			
@@ -189,19 +187,7 @@ func _perform_move(unit : Unit, direction : int, target_tile_coord : Vector2i) -
 		return
 
 
-func _perform_magic(unit : Unit, direction : int, target_tile_coord : Vector2i, spell : BattleSpell) -> void:
-	# TURN
-	unit.turn(direction)
-	if _process_symbols(unit): #TEMP think about design if there should a turn at all
-		return
-	currently_processed_move_info.register_turning_complete()
 
-	# SPELLCAST
-	"""_change_unit_coord(unit, target_tile_coord)
-	unit.move(target_tile_coord, _get_battle_hex(target_tile_coord).swamp)
-	currently_processed_move_info.register_locomote_complete()
-	if _process_symbols(unit):
-		return"""
 
 #endregion move_info support
 
@@ -578,7 +564,34 @@ func cyclone_get_current_target_turns_left() -> int:
 #region Magic
 
 func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -> bool:
-	return true #TEMP
+
+	match spell.name:
+		"Vengeance":
+			var target = get_unit(coord)
+			if target and target.controller == unit.controller:
+				return true
+		_:
+			printerr("Spell not supported: ", spell.name)
+			return false
+
+	return false #TEMP
+
+
+func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpell) -> void:
+
+	match spell.name:
+		"Vengeance":
+			get_unit(target_tile_coord).effects.append(spell)
+			print(get_unit(target_tile_coord).effects)
+		_:
+			printerr("Spell not supported: ", spell.name)
+
+	# SPELLCAST
+	"""_change_unit_coord(unit, target_tile_coord)
+	unit.move(target_tile_coord, _get_battle_hex(target_tile_coord).swamp)
+	currently_processed_move_info.register_locomote_complete()
+	if _process_symbols(unit):
+		return"""
 
 #endregion
 

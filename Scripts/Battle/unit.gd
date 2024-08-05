@@ -21,6 +21,8 @@ var dead : bool
 
 var spells : Array[BattleSpell] = []
 
+var effects : Array[BattleSpell] = []
+
 var is_on_swamp : bool = false
 
 

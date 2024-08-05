@@ -17,7 +17,6 @@ var latest_ai_cancel_token : CancellationToken
 var _current_summary : DataBattleSummary = null
 
 var _selected_unit : Unit
-var _selected_spell : BattleSpell
 
 var _replay_data : BattleReplay
 var _replay_is_playing : bool = false
@@ -267,18 +266,20 @@ func grid_input(coord : Vector2i) -> void:
 
 	var move_info : MoveInfo
 
-	if _battle_ui.selected_spell != null:
-		_battle_grid_state.state = BattleGridState.STATE_MAGIC # TEMP
+	
 
 	match _battle_grid_state.state:
 		BattleGridState.STATE_SUMMONNING:
 			move_info = _grid_input_summon(coord)
 		BattleGridState.STATE_FIGHTING:
-			move_info = _grid_input_fighting(coord)
+			if _battle_ui.selected_spell == null:
+				move_info = _grid_input_fighting(coord)
+			else:
+				move_info = _grid_input_magic(coord)
 		BattleGridState.STATE_SACRIFICE:
 			move_info = _grid_input_sacrifice(coord)
-		BattleGridState.STATE_MAGIC:
-			move_info = _grid_input_magic(coord)
+		
+			
 
 	if move_info:
 		if NET.client:
@@ -394,16 +395,11 @@ func _grid_input_sacrifice(coord : Vector2i) -> MoveInfo:
 		_battle_grid_state.mana_values_changed()
 		return MoveInfo.make_sacrifice(coord)
 	return null
-		
-
-
-
-
 
 
 ## Selected Unit -> instead of moving casts a spell
 func _grid_input_magic(coord : Vector2i) -> MoveInfo:
-	assert(_battle_grid_state.state == _battle_grid_state.STATE_MAGIC, \
+	assert(_battle_grid_state.state == _battle_grid_state.STATE_FIGHTING, \
 			"_grid_input_magic called in an incorrect state")
 
 	if _battle_ui.selected_spell == null:
@@ -471,7 +467,7 @@ func deselect_unit() -> void:
 	if _selected_unit:
 		_unit_to_unit_form[_selected_unit].set_selected(false)
 	_selected_unit = null
-	_selected_spell = null
+	_battle_ui.selected_spell = null
 	_battle_ui.reset_spells()
 
 

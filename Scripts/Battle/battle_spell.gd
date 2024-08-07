@@ -8,9 +8,7 @@ func _to_string() -> String:
 	return "BattleSpell: " + name
 
 
-
-
-
+## STUB for magic refactor
 func enchanted_unit_dies() -> void:
 	match name:
 		"Vengeance":

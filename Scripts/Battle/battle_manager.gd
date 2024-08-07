@@ -463,6 +463,8 @@ func _try_select_unit(coord : Vector2i) -> bool:
 
 	return true
 
+
+## Main way to deselect unit -> use every time, its safe
 func deselect_unit() -> void:
 	if _selected_unit:
 		_unit_to_unit_form[_selected_unit].set_selected(false)

@@ -508,11 +508,13 @@ func _remove_unit(unit : Unit) -> void:
 	assert(hex.unit == unit, "incorrect remove unit, coord desync")
 	hex.unit = null
 
-
+## Main kill unit function -> checks for end of battle
+## Contains spells related logic
 func _kill_unit(target : Unit) -> void:
 	var target_army_index := _find_army_idx(target.controller)
 	var target_army = _get_player_army(target.controller)
-	# check magic to confirm if it dies\
+
+	# check magic to confirm if it dies
 	var replaced_target : Unit = null
 	var new_target_pos : Vector2i
 	for spell in target.effects:
@@ -529,8 +531,6 @@ func _kill_unit(target : Unit) -> void:
 							new_target_pos = unit.coord
 							break
 							
-
-
 	currently_processed_move_info.register_kill(target_army_index, target)
 
 	# killing starts
@@ -538,14 +538,14 @@ func _kill_unit(target : Unit) -> void:
 	_remove_unit(target) # remove reference from hextile
 	target.unit_killed() # emit singal for visual death animation
 	_check_battle_end()
-	if not battle_is_ongoing():
+	# verify battle has ended before any additonal spell effects take place
+	if not battle_is_ongoing(): 
 		return
 
-
-	if replaced_target:
+	if replaced_target: # "Martyr" spell quick hack
 		_perform_teleport(replaced_target, new_target_pos)
 
-	# does this unit death leads to a magic effect
+	# trigger any post death spell efefect
 	for spell in target.effects:
 		#spell.enchanted_unit_dies()
 		match spell.name:
@@ -647,20 +647,21 @@ func cyclone_get_current_target_turns_left() -> int:
 
 #region Magic
 
+## verify if spell can be casted
 func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -> bool:
 
 	match spell.name:
-		"Vengeance":
+		"Vengeance", "Shield": # any ally unit
 			var target = get_unit(coord)
 			if target and target.controller == unit.controller:
 				return true
-		"Martyr":
+		"Martyr": # ally unit, but not the caster
 			var target = get_unit(coord)
 			if target and target.controller == unit.controller and target != unit:
 				return true
 		"Fireball": # any hex target is valid
 			return true
-		"Teleport":
+		"Teleport": # tile in range that is in front of the caster
 			if is_faced_tile_in_range(unit.coord, coord, unit.unit_rotation, 3):
 				return true
 		_:
@@ -669,7 +670,7 @@ func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -
 
 	return false #TEMP
 
-
+## spell takes an effect
 func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpell) -> void:
 
 	match spell.name:

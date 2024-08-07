@@ -192,7 +192,7 @@ func _perform_move(unit : Unit, direction : int, target_tile_coord : Vector2i) -
 		return
 
 
-## Basic Unit move:
+## Spell effect:
 ## unit - that is going to move |
 ## target_title_coord - hex tile it's going to move toward (doesn't have to be adjacent)
 ##  direction - 
@@ -643,9 +643,10 @@ func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -
 			var target = get_unit(coord)
 			if target and target.controller == unit.controller and target != unit:
 				return true
-
+		"Fireball": # any hex target is valid
+			return true
 		_:
-			printerr("Spell not supported: ", spell.name)
+			printerr("Spell targeting not supported: ", spell.name)
 			return false
 
 	return false #TEMP
@@ -661,11 +662,37 @@ func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpe
 			unit.effects.append(spell)  # target as well as caster both get affected
 			get_unit(target_tile_coord).effects.append(spell)
 			print(get_unit(target_tile_coord).effects)
+		"Fireball":
+			var enemy_targets : Array[Unit] = []
+			var ally_targets : Array[Unit] = []
+			var target : Unit = get_unit(target_tile_coord)
+			if target and target.controller == unit.controller:
+				ally_targets.append(target)
+			elif target:
+				enemy_targets.append(target)
+			for direction in DIRECTION_TO_OFFSET:
+				target = get_unit(target_tile_coord + direction)
+				if target and target.controller == unit.controller:
+					ally_targets.append(target)
+				elif target:
+					enemy_targets.append(target)
+			
+			for enemy_unit in enemy_targets:
+				_kill_unit(enemy_unit)
+			
+			if not battle_is_ongoing():
+				# we only start killing ally units after we are sure battle didn't end yet
+				return
+
+			for ally_unit in ally_targets: 
+				
+				_kill_unit(ally_unit)
+
 		_:
-			printerr("Spell not supported: ", spell.name)
+			printerr("Spell perform not supported: ", spell.name)
 			return
 
-	unit.spells.erase(spell)
+	#unit.spells.erase(spell) # Remove to test casting multiple times
 
 
 #endregion

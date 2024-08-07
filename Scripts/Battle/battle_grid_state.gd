@@ -175,6 +175,9 @@ func _undo_push(_move : MoveInfo , pushed : MoveInfo.PushedUnit) -> void:
 	p_unit.move(pushed.from_coord, p_hex.swamp)
 
 
+## Basic Unit move:
+## unit - that is going to move | direction - it will move toward
+## target_title_coord - hex tile it's going to move toward (doesn't have to be adjacent)
 func _perform_move(unit : Unit, direction : int, target_tile_coord : Vector2i) -> void:
 	# TURN
 	unit.turn(direction)
@@ -189,6 +192,23 @@ func _perform_move(unit : Unit, direction : int, target_tile_coord : Vector2i) -
 		return
 
 
+## Basic Unit move:
+## unit - that is going to move |
+## target_title_coord - hex tile it's going to move toward (doesn't have to be adjacent)
+##  direction - 
+func _perform_teleport(unit : Unit, target_tile_coord : Vector2i, direction : int = -1) -> void:
+	# TURN
+	if direction != -1:
+		unit.turn(direction)
+		# No need to chceck for counter damage here as rotation happens
+		# "during" teleport so we care only about counter damage once we arrive
+		currently_processed_move_info.register_turning_complete()
+	# MOVE
+	_change_unit_coord(unit, target_tile_coord)
+	unit.move(target_tile_coord, _get_battle_hex(target_tile_coord).swamp)
+	currently_processed_move_info.register_locomote_complete()
+	if _process_symbols(unit):
+		return
 
 
 #endregion move_info support
@@ -476,16 +496,39 @@ func _remove_unit(unit : Unit) -> void:
 
 func _kill_unit(target : Unit) -> void:
 	var target_army_index := _find_army_idx(target.controller)
-	
+	var target_army = _get_player_army(target.controller)
+	# check magic to confirm if it dies\
+	var replaced_target : Unit = null
+	var new_target_pos : Vector2i
+	for spell in target.effects:
+		#spell.enchanted_unit_dies()
+		match spell.name:
+			"Martyr":
+				for unit in target_army.units:
+					if replaced_target:
+						break
+					for ally_spell in unit.effects:
+						if ally_spell.name == "Martyr":
+							replaced_target = target
+							target = unit
+							new_target_pos = unit.coord
+							break
+							
+
+
 	currently_processed_move_info.register_kill(target_army_index, target)
 
 	# killing starts
-	_get_player_army(target.controller).kill_unit(target)
+	target_army.kill_unit(target)
 	_remove_unit(target) # remove reference from hextile
 	target.unit_killed() # emit singal for visual death animation
 	_check_battle_end()
 	if not battle_is_ongoing():
 		return
+
+
+	if replaced_target:
+		_perform_teleport(replaced_target, new_target_pos)
 
 	# does this unit death leads to a magic effect
 	for spell in target.effects:
@@ -596,6 +639,11 @@ func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -
 			var target = get_unit(coord)
 			if target and target.controller == unit.controller:
 				return true
+		"Martyr":
+			var target = get_unit(coord)
+			if target and target.controller == unit.controller and target != unit:
+				return true
+
 		_:
 			printerr("Spell not supported: ", spell.name)
 			return false
@@ -607,6 +655,10 @@ func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpe
 
 	match spell.name:
 		"Vengeance":
+			get_unit(target_tile_coord).effects.append(spell)
+			print(get_unit(target_tile_coord).effects)
+		"Martyr":
+			unit.effects.append(spell)  # target as well as caster both get affected
 			get_unit(target_tile_coord).effects.append(spell)
 			print(get_unit(target_tile_coord).effects)
 		_:

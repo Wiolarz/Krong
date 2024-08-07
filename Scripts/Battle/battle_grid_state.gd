@@ -345,6 +345,21 @@ func _get_shot_target(coord : Vector2i, direction : int) -> Unit:
 		hex = _get_battle_hex(target_coord)
 	return hex.unit
 
+## Checks if given tile relative to start tile is in specific direction within specific range [br]
+## start_tile, end_tile | direction = -1 search in all directions| range = -1 with that value searh till the end of board
+func is_faced_tile_in_range(start_coord : Vector2i, end_coord : Vector2i, direction : int, range : int = -1) -> bool:
+	for angle in range(6):
+		var tile : Vector2i = start_coord
+		if direction != -1:
+			angle = direction
+		var idx = 0
+		while idx < range:
+			idx += 1
+			tile += DIRECTION_TO_OFFSET[angle]
+			if tile == end_coord:
+				return true
+	return false
+
 
 func is_move_valid(unit : Unit, coord : Vector2i) -> bool:
 	return _get_move_direction_if_valid(unit, coord) != MOVE_IS_INVALID
@@ -645,6 +660,9 @@ func is_spell_target_valid(unit : Unit, coord : Vector2i, spell : BattleSpell) -
 				return true
 		"Fireball": # any hex target is valid
 			return true
+		"Teleport":
+			if is_faced_tile_in_range(unit.coord, coord, unit.unit_rotation, 3):
+				return true
 		_:
 			printerr("Spell targeting not supported: ", spell.name)
 			return false
@@ -687,12 +705,13 @@ func _perform_magic(unit : Unit, target_tile_coord : Vector2i, spell : BattleSpe
 			for ally_unit in ally_targets: 
 				
 				_kill_unit(ally_unit)
-
+		"Teleport":
+			_perform_teleport(unit, target_tile_coord)
 		_:
 			printerr("Spell perform not supported: ", spell.name)
 			return
 
-	#unit.spells.erase(spell) # Remove to test casting multiple times
+	unit.spells.erase(spell) # Remove to test casting multiple times
 
 
 #endregion

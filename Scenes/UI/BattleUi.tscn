@@ -139,8 +139,8 @@ text = "Player1 5 turns"
 [node name="SpellBook" type="VBoxContainer" parent="."]
 offset_left = 22.0
 offset_top = 282.0
-offset_right = 226.0
-offset_bottom = 768.0
+offset_right = 178.0
+offset_bottom = 800.0
 
 [node name="Spell" type="Button" parent="SpellBook"]
 layout_mode = 2

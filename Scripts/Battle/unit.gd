@@ -19,6 +19,10 @@ var unit_rotation : int
 ## unit died
 var dead : bool
 
+var spells : Array[BattleSpell] = []
+
+var effects : Array[BattleSpell] = []
+
 var is_on_swamp : bool = false
 
 
@@ -31,6 +35,7 @@ static func create(new_controller : Player, \
 	result.template = new_template
 	result.coord = new_coord
 	result.unit_rotation = new_rotation
+	result.spells = new_template.spells
 	return result
 
 

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BattleSpell" load_steps=2 format=3 uid="uid://34m12aa1mich"]
+
+[ext_resource type="Script" path="res://Scripts/Battle/battle_spell.gd" id="1_m0up1"]
+
+[resource]
+script = ExtResource("1_m0up1")
+name = "Martyr"
+icon_path = "res://Art/items/shields/blue shield.png"

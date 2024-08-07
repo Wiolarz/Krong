@@ -19,3 +19,4 @@ texture_path = "res://Art/world_heroes/orc_chaplain.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_sj8bg"), ExtResource("4_mincs"), ExtResource("5_pwexe"), ExtResource("5_pwexe"), ExtResource("5_pwexe"), ExtResource("4_mincs")])
 cost = SubResource("Resource_bgw4c")
 level = 1
+mana = 1

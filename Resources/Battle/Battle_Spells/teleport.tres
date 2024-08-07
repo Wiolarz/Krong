@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BattleSpell" load_steps=2 format=3 uid="uid://bmrgon7ovm2hl"]
+
+[ext_resource type="Script" path="res://Scripts/Battle/battle_spell.gd" id="1_0306o"]
+
+[resource]
+script = ExtResource("1_0306o")
+name = "Teleport"
+icon_path = "res://Art/items/druid_staff.png"

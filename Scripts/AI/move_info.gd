@@ -3,11 +3,14 @@ extends Resource
 
 const TYPE_MOVE = "move"
 const TYPE_SUMMON = "summon"
+const TYPE_SACRIFICE = "sacrifice"
+const TYPE_MAGIC = "magic"
 
-@export var move_type: String = ""
-@export var summon_unit: DataUnit
-@export var move_source: Vector2i
-@export var target_tile_coord: Vector2i
+@export var move_type : String = ""
+@export var summon_unit : DataUnit
+@export var move_source : Vector2i
+@export var target_tile_coord : Vector2i
+@export var spell : BattleSpell
 
 # REPLAY ONLY DATA:
 @export var time_left_ms : int
@@ -22,8 +25,10 @@ var original_rotation : int = -1
 var actions_list : Array = []
 
 
+#region Constructors
+
 static func make_move(src : Vector2i, dst : Vector2i) -> MoveInfo:
-	var result:MoveInfo = MoveInfo.new()
+	var result := MoveInfo.new()
 	result.move_type = TYPE_MOVE
 	result.move_source = src
 	result.target_tile_coord = dst
@@ -31,11 +36,29 @@ static func make_move(src : Vector2i, dst : Vector2i) -> MoveInfo:
 
 
 static func make_summon(unit : DataUnit, dst : Vector2i) -> MoveInfo:
-	var result:MoveInfo = MoveInfo.new()
+	var result := MoveInfo.new()
 	result.move_type = TYPE_SUMMON
 	result.summon_unit = unit
 	result.target_tile_coord = dst
 	return result
+
+
+static func make_sacrifice(src : Vector2i) -> MoveInfo:
+	var result := MoveInfo.new()
+	result.move_type = TYPE_SACRIFICE
+	result.move_source = src
+	return result
+
+
+static func make_magic(move_source_ : Vector2i, target_tile_coord_ : Vector2i, spell_ : BattleSpell) -> MoveInfo:
+	var result := MoveInfo.new()
+	result.move_type = TYPE_MAGIC
+	result.move_source = move_source_
+	result.target_tile_coord = target_tile_coord_
+	result.spell = spell_
+	return result
+
+#endregion Constructors
 
 
 func to_network_serializable() -> Dictionary:
@@ -56,11 +79,13 @@ static func from_network_serializable(dict : Dictionary) -> MoveInfo:
 		MoveInfo.TYPE_MOVE:
 			return MoveInfo.make_move(dict["move_source"],
 					dict["target_tile_coord"])
+		MoveInfo.TYPE_SACRIFICE:
+			return MoveInfo.make_sacrifice(dict["move_source"])
 	push_error("move_type not supported: ", dict["move_type"])
 	return null
 
 
-#region notyfications for undo
+#region notification for undo
 
 func register_move_start(army_idx_ : int, unit:Unit) -> void:
 	army_idx = army_idx_
@@ -87,7 +112,7 @@ func register_locomote_complete() -> void:
 
 
 func register_whole_move_complete() -> void:
-	pass
+	pass #TODO check what it was supposed to even do?
 
 #endregion notyfications for undo
 

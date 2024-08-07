@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresetBattle" load_steps=12 format=3 uid="uid://dahoaf4wo5bur"]
+
+[ext_resource type="Script" path="res://Resources/Presets/preset_army.gd" id="1_3tj5i"]
+[ext_resource type="Resource" uid="uid://i6rd1k4pejbh" path="res://Resources/Battle/Units/Classic/elf1.tres" id="2_h26ug"]
+[ext_resource type="Resource" uid="uid://b74a77jns7xcd" path="res://Resources/Battle/Units/Elves/elf_unit_hero_druid.tres" id="3_lp0rr"]
+[ext_resource type="Resource" uid="uid://lijo3rfcpr7n" path="res://Resources/Battle/Units/Orcs/orc_1_brute.tres" id="5_vkvtb"]
+[ext_resource type="Resource" uid="uid://wg6n0n7ufoxh" path="res://Resources/Battle/Units/Classic/orc2.tres" id="6_xa6rw"]
+[ext_resource type="Resource" uid="uid://bjdx7ccnprig2" path="res://Resources/Battle/Battle_Maps/a_mana_basic5x5.tres" id="8_8ryoa"]
+[ext_resource type="Resource" uid="uid://dm2jeuv4bo4lw" path="res://Resources/Presets/Player/human_elf.tres" id="9_cg5sv"]
+[ext_resource type="Resource" uid="uid://dkgrcmar25cmi" path="res://Resources/Presets/Player/human_orc.tres" id="10_r22v0"]
+[ext_resource type="Script" path="res://Resources/Presets/preset_battle.gd" id="11_pgmqq"]
+
+[sub_resource type="Resource" id="Resource_8gfw6"]
+script = ExtResource("1_3tj5i")
+units = Array[Resource("res://Resources/Battle/data_unit.gd")]([ExtResource("2_h26ug"), ExtResource("3_lp0rr")])
+
+[sub_resource type="Resource" id="Resource_renb5"]
+script = ExtResource("1_3tj5i")
+units = Array[Resource("res://Resources/Battle/data_unit.gd")]([ExtResource("6_xa6rw"), ExtResource("5_vkvtb")])
+
+[resource]
+script = ExtResource("11_pgmqq")
+player_settings = Array[Resource("res://Resources/Presets/preset_player.gd")]([ExtResource("9_cg5sv"), ExtResource("10_r22v0")])
+armies = Array[ExtResource("1_3tj5i")]([SubResource("Resource_8gfw6"), SubResource("Resource_renb5")])
+battle_map = ExtResource("8_8ryoa")

@@ -18,3 +18,4 @@ texture_path = "res://Art/units/elf/elf_archer.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("4_fssgl"), ExtResource("4_e4j4m"), ExtResource("4_e4j4m"), ExtResource("4_e4j4m"), ExtResource("4_e4j4m"), ExtResource("4_e4j4m")])
 cost = SubResource("Resource_505uq")
 level = 1
+mana = 0

@@ -19,3 +19,4 @@ texture_path = "res://Art/world_heroes/elf_noble.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_bi52n"), ExtResource("4_iqq4y"), ExtResource("5_6pgeb"), ExtResource("5_6pgeb"), ExtResource("5_6pgeb"), ExtResource("4_iqq4y")])
 cost = SubResource("Resource_o8yk3")
 level = 1
+mana = 0

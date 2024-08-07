@@ -20,3 +20,4 @@ symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource(
 cost = SubResource("Resource_h1m34")
 required_building = ExtResource("2_ww81b")
 level = 3
+mana = 0

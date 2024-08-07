@@ -93,7 +93,7 @@ size_flags_vertical = 3
 [node name="TurnsBG" type="ColorRect" parent="."]
 offset_left = 803.0
 offset_top = 34.0
-offset_right = 1326.0
+offset_right = 1283.0
 offset_bottom = 150.0
 color = Color(0, 0, 0, 0.423529)
 
@@ -112,6 +112,39 @@ offset_top = 64.0
 offset_right = 495.0
 offset_bottom = 114.0
 text = "3 : 00 : 000"
+
+[node name="CycloneTimer" type="ColorRect" parent="."]
+offset_left = 1308.0
+offset_top = 34.0
+offset_right = 1593.0
+offset_bottom = 150.0
+color = Color(0, 0, 0, 0.423529)
+
+[node name="FluffText" type="Label" parent="CycloneTimer"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 493.0
+offset_bottom = 55.0
+text = "Cyclone Target"
+
+[node name="CycloneTarget" type="Label" parent="CycloneTimer"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 64.0
+offset_right = 495.0
+offset_bottom = 114.0
+text = "Player1 5 turns"
+
+[node name="SpellBook" type="VBoxContainer" parent="."]
+offset_left = 22.0
+offset_top = 282.0
+offset_right = 178.0
+offset_bottom = 800.0
+
+[node name="Spell" type="Button" parent="SpellBook"]
+layout_mode = 2
+text = "Spell"
 
 [connection signal="pressed" from="SwitchCamera" to="." method="_on_switch_camera_pressed"]
 [connection signal="pressed" from="Menu" to="." method="_on_menu_pressed"]

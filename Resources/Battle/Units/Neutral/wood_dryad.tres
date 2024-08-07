@@ -18,3 +18,4 @@ texture_path = "res://Art/units/neutral/wood_dryad.png"
 symbols = Array[Resource("res://Resources/Battle/data_symbol.gd")]([ExtResource("3_c481m"), ExtResource("3_c481m"), ExtResource("3_c481m"), ExtResource("5_0em2m"), ExtResource("3_c481m"), ExtResource("3_c481m")])
 cost = SubResource("Resource_6r5q3")
 level = 1
+mana = 0

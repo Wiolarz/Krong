@@ -109,6 +109,7 @@ func _refresh_slot(index : int) -> void:
 	ui_slot.set_visible_name(username)
 	ui_slot.set_visible_take_leave_button_state(take_leave_button_state)
 	ui_slot.setup_ui = self
+	ui_slot.set_bot(logic_slot.battle_bot_path)
 
 
 func slot_to_index(slot) -> int:

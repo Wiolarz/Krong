@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt2lnm78fnj7b"]
+
+[ext_resource type="Script" path="res://Scripts/AI/MCTS/ai_battle_bot_mcts.gd" id="1_22smq"]
+
+[node name="MctsHard" type="Node"]
+script = ExtResource("1_22smq")

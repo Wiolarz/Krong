@@ -42,6 +42,11 @@ func save():
 	BattleReplay.prepare_replay_directory()
 	ResourceSaver.save(self, CFG.REPLAY_DIRECTORY + get_filename())
 
+func save_as(name: String):
+	var replay = self.duplicate()
+	replay.player_names.push_back(name)
+	replay.save()
+
 func get_player_name(army_idx : int) -> String:
 	if not player_names or army_idx >= player_names.size():
 		return "unknown"

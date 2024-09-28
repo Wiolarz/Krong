@@ -73,6 +73,18 @@ func _on_input_event(_viewport : Node, event : InputEvent, _shape_idx : int):
 		UI.grid_input_listener(coord, grid_type, true)
 
 
+func to_battle_grid_enum() -> int:
+	match type:
+		"sentinel":   return 1
+		"wall":       return 1
+		"":			  return 1 # IMPASSABLE
+		"blue_spawn": return 0
+		"red_spawn":  return 0
+		"empty":      return 0
+	assert(false, "Unknown tile type while converting to TGFast enum: %s (@%s)" % [type, coord])
+	return 1
+
+
 func _process(_delta):
 	$PlaceLabel.text = ""
 	if hex and hex.place: #TEMP

@@ -41,7 +41,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="PlayerInfoPanel" type="Panel" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nhatr")
 
@@ -57,19 +57,25 @@ text = "Zdzichu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="OptionButtonBot" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+allow_reselect = true
+
 [node name="ButtonTakeLeave" type="Button" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Take"
 
 [node name="ButtonColor" type="Button" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Color"
 
 [node name="OptionButtonTeam" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
 [node name="OptionButtonUnit1" type="OptionButton" parent="VBoxContainer"]

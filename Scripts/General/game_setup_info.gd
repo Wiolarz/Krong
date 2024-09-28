@@ -40,6 +40,8 @@ func set_team(slot_index : int, team_idx : int):
 func set_unit(slot_index : int, unit_index : int, unit_data : DataUnit):
 	slots[slot_index].units_list[unit_index] = unit_data
 
+func set_battle_bot(slot_index: int, path: String):
+	slots[slot_index].battle_bot_path = path
 
 func to_dictionary(local_username : String = "") -> Dictionary:
 	var result = {
@@ -220,6 +222,7 @@ class Slot extends RefCounted: # check if this is good base
 	## `String == ""` -> we (local player) [br]
 	## `String != ""` -> remote player with specified network name [br]
 	var occupier = ""
+	var battle_bot_path: String = ""
 
 	## index of color see `CFG.TEAM_COLORS`
 	var color : int = 0

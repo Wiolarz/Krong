@@ -138,7 +138,9 @@ func register_whole_move_complete() -> void:
 
 
 func _to_string() -> String:
-	if move_type == TYPE_SUMMON:
+	if move_type == TYPE_MAGIC:
+		return "cast " + spell.name + " on " + str(target_tile_coord) + " from " + str(move_source)
+	elif move_type == TYPE_SUMMON:
 		return TYPE_SUMMON + " " + str(target_tile_coord) + " " + summon_unit.unit_name
 	return move_type + " " + str(target_tile_coord) + " from " + str(move_source)
 

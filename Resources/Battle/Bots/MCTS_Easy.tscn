@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://c03ghryhyskuh"]
+
+[ext_resource type="Script" path="res://Scripts/AI/MCTS/ai_battle_bot_mcts.gd" id="1_nohmd"]
+
+[node name="MctsEasy" type="Node"]
+script = ExtResource("1_nohmd")
+iterations = 100
+max_sim_turns = 20
+heuristic_probability = 0.95
+reward_per_visit_dither = 0.2

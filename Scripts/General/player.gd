@@ -18,8 +18,11 @@ static func create(new_slot : GameSetupInfo.Slot) -> Player:
 	result.slot = new_slot
 
 	if new_slot.is_bot():
-		result.bot_engine = ExampleBot.new(result)
+		result.bot_engine = load(new_slot.battle_bot_path).instantiate()
 		result.add_child(result.bot_engine)
+		result.bot_engine.set_player(result)
+		assert(result.bot_engine != null, "Bot '%s' does not exist" % new_slot.battle_bot_path)
+
 	result.name = "Player_" + result.get_player_name()
 
 	return result

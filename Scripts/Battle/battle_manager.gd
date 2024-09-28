@@ -1,5 +1,5 @@
 # Singleton - BM
-extends GridNode2D
+class_name BattleManager extends GridNode2D
 
 var _battle_is_ongoing : bool = false
 
@@ -62,7 +62,6 @@ func start_battle(new_armies : Array[Army], battle_map : DataBattleMap, \
 	_current_summary = null
 	deselect_unit()
 
-	# GAMEPLAY GRID and Armies state:
 	_battle_grid_state = BattleGridState.create(battle_map, new_armies)
 
 	# GRAPHICS GRID:
@@ -180,14 +179,27 @@ func _on_turn_started(player : Player) -> void:
 
 	if player.bot_engine and not NET.client: # AI is simulated on server only
 		print("AI starts thinking")
+		
 		var my_cancel_token = CancellationToken.new()
-		assert(latest_ai_cancel_token == null)
+		#assert(latest_ai_cancel_token == null)
 		latest_ai_cancel_token = my_cancel_token
-		var move = player.bot_engine.choose_move(_battle_grid_state)
-		await _ai_thinking_delay() # moving too fast feels weird
+		
+		var bot = player.bot_engine
+		
+		var thinking_begin_s = Time.get_ticks_msec() / 1000.0
+		var move = await bot.choose_move(_battle_grid_state)
+		await _ai_thinking_delay(thinking_begin_s) # moving too fast feels weird
+		
+		bot.cleanup_after_move()
+		if _battle_grid_state == null: # Player quit to main menu before finishing
+			return
+		
 		if not my_cancel_token.is_canceled():
-			latest_ai_cancel_token = null
+			assert(_battle_grid_state.is_move_possible(move), "AI tried to perform an invalid move")
 			_perform_ai_move(move)
+			latest_ai_cancel_token = null
+
+
 
 
 func perform_network_move(move_info : MoveInfo) -> void:
@@ -311,9 +323,9 @@ func cancel_pending_ai_move() ->  void:
 		latest_ai_cancel_token = null
 
 
-func _ai_thinking_delay() -> void:
-	var seconds = CFG.bot_speed_frames / 60.0
-	print("ai wait %f s" % [seconds])
+func _ai_thinking_delay(thinking_begin_s) -> void:
+	var max_seconds = CFG.bot_speed_frames / 60.0
+	var seconds = max(0.01, max_seconds - (Time.get_ticks_msec()/1000.0 - thinking_begin_s))
 	await get_tree().create_timer(seconds).timeout
 	while IM.is_game_paused() or CFG.bot_speed_frames == CFG.BotSpeed.FREEZE:
 		await get_tree().create_timer(0.1).timeout
@@ -492,6 +504,7 @@ func _perform_move_info(move_info : MoveInfo) -> void:
 	if not _battle_is_ongoing:
 		return
 	print(NET.get_role_name(), " performing move ", move_info)
+
 
 	_replay_data.record_move(move_info, get_current_time_left_ms())
 	_replay_data.save()

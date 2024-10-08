@@ -227,11 +227,12 @@ func _should_die_to_counter_attack(unit : Unit) -> bool:
 		if adjacent_units[side].army_in_battle.team == unit.army_in_battle.team:
 			continue # no friendly fire within team
 		var unit_symbol : E.Symbols = unit.get_symbol(side)
-		if Unit.does_it_parry(unit_symbol):
-			continue  # parry prevents counter attacks
-
 		var opposite_side := GenericHexGrid.opposite_direction(side)
 		var enemy_symbol : E.Symbols = adjacent_units[side].get_symbol(opposite_side)
+
+		if Unit.will_parry_occur(enemy_symbol, unit_symbol):
+			continue  # parry prevents counter attacks
+		
 		if Unit.does_it_counter_attack(enemy_symbol):
 			var shield_power : int = Unit.defense_power(unit_symbol)
 			if Unit.attack_power(enemy_symbol) > shield_power:
@@ -262,7 +263,7 @@ func _process_offensive_symbols(unit : Unit) -> void:
 		var enemy = adjacent[side]
 		var opposite_side := GenericHexGrid.opposite_direction(side)
 		var enemy_weapon = enemy.get_symbol(opposite_side)
-		if Unit.does_it_parry(enemy_weapon):
+		if Unit.will_parry_occur(unit_weapon, enemy_weapon):
 			continue  # parry disables all melee symbols
 
 		# we check if attacking symbol power is able to kill
@@ -479,11 +480,12 @@ func _can_kill_or_push(me : Unit, other_unit : Unit, attack_direction : int):
 
 	var defense_direction = GenericHexGrid.opposite_direction(attack_direction)
 	var enemy_symbol = other_unit.get_symbol(defense_direction)
+	var front_symbol : E.Symbols = me.get_front_symbol()
 	
-	if Unit.does_it_parry(enemy_symbol):
+	if Unit.will_parry_occur(front_symbol, enemy_symbol):
 		return false  # parry ignores our melee symbols
 
-	var front_symbol : E.Symbols = me.get_front_symbol()
+	
 
 	if Unit.can_it_push(front_symbol):
 		return true  # push ignores enemy_unit shields
@@ -1080,11 +1082,12 @@ func _ai_should_die_to_counter_attack(unit : Unit, direction : int, coord : Vect
 		if adjacent_units[side].army_in_battle.team == unit.army_in_battle.team:
 			continue  # no friendly fire within team
 		var unit_symbol : E.Symbols = unit.get_symbol_when_rotated(side, direction)
-		if Unit.does_it_parry(unit_symbol):
-			continue  # parry prevents counter attacks
-
 		var opposite_side := GenericHexGrid.opposite_direction(side)
 		var enemy_symbol : E.Symbols = adjacent_units[side].get_symbol(opposite_side)
+
+		if Unit.will_parry_occur(unit_symbol, enemy_symbol):
+			continue  # parry prevents counter attacks
+		
 		if Unit.does_it_counter_attack(enemy_symbol):
 			var shield_power : int = Unit.defense_power(unit_symbol)
 			if Unit.attack_power(enemy_symbol) > shield_power:
@@ -1110,7 +1113,7 @@ func _ai_will_melee_kill_someone(unit : Unit, direction : int, coord : Vector2i)
 		var enemy : Unit = adjacent_units[side]
 		var opposite_side := GenericHexGrid.opposite_direction(side)
 		var enemy_weapon : E.Symbols = enemy.get_symbol(opposite_side)
-		if Unit.does_it_parry(enemy_weapon):
+		if Unit.will_parry_occur(unit_weapon, enemy_weapon):
 			continue  # parry disables all melee symbols
 
 		# we check if attacking symbol power is able to kill

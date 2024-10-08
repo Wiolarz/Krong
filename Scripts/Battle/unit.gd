@@ -171,9 +171,21 @@ static func push_power(symbol : E.Symbols) -> int:
 			return 0
 
 
+static func will_parry_occur(attack_symbol : E.Symbols, defense_symbol : E.Symbols):
+	return Unit.does_it_parry(defense_symbol) and not Unit.does_it_parry_break(attack_symbol)
+
+
 static func does_it_parry(symbol : E.Symbols) -> bool:
 	match symbol:
-		E.Symbols.SWORD:
+		E.Symbols.SWORD, E.Symbols.GREAT_SWORD:
+			return true
+		_:
+			return false
+
+
+static func does_it_parry_break(symbol : E.Symbols) -> bool:
+	match symbol:
+		E.Symbols.SCYTHE, E.Symbols.SICKLE:
 			return true
 		_:
 			return false

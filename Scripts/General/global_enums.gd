@@ -27,7 +27,13 @@ enum Symbols
 	MACE,  # NORMAL PUSH
 	DAGGER,
 
+	# Parry
 	SWORD,
+	GREAT_SWORD,
+
+	# Parry Break
+	SCYTHE,
+	SICKLE,
 }
 
 
